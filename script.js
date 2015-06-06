@@ -11,12 +11,18 @@ $(document).ready(function() {
 });
 
 function getTypes() {
-  $.get('https://api.github.com/repos/github/gitignore/contents/', function(d) {
-    types = convertToArrayOfGitignoreFiles(d);
-  })
-  .fail(function() {
-    types = ['Meteor', 'Ada'];
-  });
+  if (localStorage.getItem('types')) {
+    types = localStorage.getItem('types').split(',');
+  } else {
+    $.get('https://api.github.com/repos/github/gitignore/contents/', function(d) {
+      types = convertToArrayOfGitignoreFiles(d);
+      localStorage.setItem('types', types);
+    })
+    .fail(function() {
+      types = ['Meteor', 'Ada'];
+      localStorage.setItem('types', types);
+    });
+  }
 }
 
 function convertToArrayOfGitignoreFiles(d) {
