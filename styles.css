@@ -1,0 +1,25 @@
+body {
+	font-family: 'Open Sans';
+  background-color: #333;
+  color: #FFF;
+}
+
+.container {
+	width: 600px;
+	margin: 0 auto;
+}
+
+body {
+  margin: 0;
+}
+
+.header {
+  padding-bottom: 40px;
+  background-color: #FFF;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 40px;
+  color: #333;
+}
