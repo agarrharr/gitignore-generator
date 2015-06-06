@@ -8,7 +8,8 @@
     <ul id="searchResults"></ul>
     <textarea id="results" cols="100" rows="20"></textarea>
     <script>
-    var gitignoreFiles;
+    var gitignoreTypes = [];
+    var selectedTypes = [];
 
     $(document).ready(function() {
       getGitignoreFile();
@@ -21,19 +22,19 @@
 
     function getGitignoreFile() {
       $.get('https://api.github.com/repos/github/gitignore/contents/', function(d) {
-        gitignoreFiles = convertToArrayOfGitignoreFiles(d);
+        gitignoreTypes = convertToArrayOfGitignoreFiles(d);
       })
       .fail(function() {
-        gitignoreFiles = ['Meteor', 'Ada'];
+        gitignoreTypes = ['Meteor', 'Ada'];
       });
     }
 
     function convertToArrayOfGitignoreFiles(d) {
-      var gitignoreFiles = [];
+      var gitignoreTypes = [];
       for(var i = 0; i < d.length; i += 1) {
-        gitignoreFiles.push(d[i].name.split('.')[0]);
+        gitignoreTypes.push(d[i].name.split('.')[0]);
       }
-      return gitignoreFiles;
+      return gitignoreTypes;
     }
 
     function makeGitignoreSearch(searchTerm) {
@@ -43,9 +44,9 @@
     }
 
     function isValidType(type) {
-      for(var i = 0; i < gitignoreFiles.length; i += 1) {
-        if (gitignoreFiles[i].toLowerCase() === type.toLowerCase()) {
-          return gitignoreFiles[i];
+      for(var i = 0; i < gitignoreTypes.length; i += 1) {
+        if (gitignoreTypes[i].toLowerCase() === type.toLowerCase()) {
+          return gitignoreTypes[i];
         }
       }
       return false;
@@ -65,18 +66,35 @@
       if (checked) {
         $.get('https://api.github.com/repos/github/gitignore/contents/' + type + '.gitignore', function(d) {
           var content = atob(d.content);
-          appendToTextArea(content);
+          selectedTypes.push({name: type, content: d.content});
+          updateTextArea();
         })
         .fail(function() {
-          appendToTextArea('example code\nyeah');
+          selectedTypes.push({name: type, content: 'example code\nyeah'});
+          updateTextArea();
         });
+      } else {
+        for(var i = 0; i < selectedTypes.length; i += 1) {
+          if (type.toLowerCase() === selectedTypes[i].name.toLowerCase()) {
+            selectedTypes.splice(i, 1);
+            updateTextArea();
+            break;
+          }
+        }
       }
     }
 
-    function appendToTextArea(content) {
-      $('#results').val(function(i, val) {
-        return (val ? val + '\n\n': '') + content;
-      });
+    function updateTextArea() {
+      var totalContent = '';
+      for(var i = 0; i < selectedTypes.length; i += 1) {
+        if (i > 0) {
+          totalContent += '\n\n';
+        }
+        totalContent += '# ' + selectedTypes[i].name + '\n';
+        totalContent += selectedTypes[i].content;
+      }
+
+      $('#results').val(totalContent);
     }
     </script>
   </body>
