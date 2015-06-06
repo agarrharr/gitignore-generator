@@ -53,7 +53,11 @@
     }
 
     function showResults(type) {
-      var $input = $('<input type="checkbox" data-type="' + type + '" />');
+      var checked = '';
+      if (indexOfSelected(type) !== -1) {
+        checked = 'checked';
+      }
+      var $input = $('<input type="checkbox" data-type="' + type + '" ' + checked + ' />');
       var $html = $('<li>' + type + '</li>');
       $html.prepend($input);
       $input.on('click', addContentToTextArea);
@@ -74,13 +78,8 @@
           updateTextArea();
         });
       } else {
-        for(var i = 0; i < selectedTypes.length; i += 1) {
-          if (type.toLowerCase() === selectedTypes[i].type.toLowerCase()) {
-            selectedTypes.splice(i, 1);
-            updateTextArea();
-            break;
-          }
-        }
+        selectedTypes.splice(indexOfSelected(type), 1);
+        updateTextArea();
       }
     }
 
@@ -95,6 +94,16 @@
       }
 
       $('#results').val(totalContent);
+    }
+
+    function indexOfSelected(type) {
+      for(var i = 0; i < selectedTypes.length; i += 1) {
+        if (type.toLowerCase() === selectedTypes[i].type.toLowerCase()) {
+          return i;
+          break;
+        }
+      }
+      return -1;
     }
     </script>
   </body>
