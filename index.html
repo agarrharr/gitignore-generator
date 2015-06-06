@@ -1,0 +1,48 @@
+<html>
+  <head>
+    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+  </head>
+  <body>
+    <label>What type of stuff do you want to ignore?</label>
+    <input type="text" id="projectTypeInput"></input>
+    <script>
+    var gitignoreFiles;
+
+    $(document).ready(function() {
+      getGitignoreFile();
+
+      $('#projectTypeInput').keyup(function() {
+        var value = $(this).val();
+        makeGitignoreSearch(value);
+      });
+    });
+
+    function getGitignoreFile() {
+      $.get('https://api.github.com/repos/github/gitignore/contents/', function(d) {
+        gitignoreFiles = convertToArrayOfGitignoreFiles(d);
+      });
+    }
+
+    function convertToArrayOfGitignoreFiles(d) {
+      var gitignoreFiles = [];
+      for(var i = 0; i < d.length; i += 1) {
+        gitignoreFiles.push(d[i].name.split('.')[0].toLowerCase());
+      }
+      return gitignoreFiles;
+    }
+
+    function makeGitignoreSearch(searchTerm) {
+      console.log(isValidType(searchTerm));
+    }
+
+    function isValidType(type) {
+      for(var i = 0; i < gitignoreFiles.length; i += 1) {
+        if (gitignoreFiles[i] === type) {
+          return true;
+        }
+      }
+      return false;
+    }
+    </script>
+  </body>
+</html>
