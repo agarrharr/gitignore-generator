@@ -11,16 +11,16 @@ $(document).ready(function() {
 });
 
 function getTypes() {
-  if (localStorage.getItem('types')) {
+  if (localStorage.getItem('gitignore-types')) {
     types = localStorage.getItem('types').split(',');
   } else {
     $.get('https://api.github.com/repos/github/gitignore/contents/', function(d) {
       types = convertToArrayOfGitignoreFiles(d);
-      localStorage.setItem('types', types);
+      localStorage.setItem('gitignore-types', types);
     })
     .fail(function() {
       types = ['Meteor', 'Ada'];
-      localStorage.setItem('types', types);
+      localStorage.setItem('gitignore-types', types);
     });
   }
 }
