@@ -22,6 +22,9 @@
     function getGitignoreFile() {
       $.get('https://api.github.com/repos/github/gitignore/contents/', function(d) {
         gitignoreFiles = convertToArrayOfGitignoreFiles(d);
+      })
+      .fail(function() {
+        gitignoreFiles = ['Meteor', 'Ada'];
       });
     }
 
@@ -49,21 +52,28 @@
     }
 
     function showResults(type) {
-      var $html = $('<li data-type=' + type + '><input type="checkbox"/>' + type + '</li>');
-      $html.on('click', addContentToTextArea);
+      var $input = $('<input type="checkbox" data-type="' + type + '" />');
+      var $html = $('<li>' + type + '</li>');
+      $html.prepend($input);
+      $input.on('click', addContentToTextArea);
       $('#searchResults').html($html);
     }
 
     function addContentToTextArea(type) {
+      var checked = $(this).prop('checked');
       var type = $(this).data('type');
-      $.get('https://api.github.com/repos/github/gitignore/contents/' + type + '.gitignore', function(d) {
-        var content = atob(d.content);
-        appendToTextArea(content);
-      });
+      if (checked) {
+        $.get('https://api.github.com/repos/github/gitignore/contents/' + type + '.gitignore', function(d) {
+          var content = atob(d.content);
+          appendToTextArea(content);
+        })
+        .fail(function() {
+          appendToTextArea('example code\nyeah');
+        });
+      }
     }
 
     function appendToTextArea(content) {
-      console.log(content);
       $('#results').val(function(i, val) {
         return (val ? val + '\n\n': '') + content;
       });
