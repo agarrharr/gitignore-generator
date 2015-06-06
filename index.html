@@ -66,16 +66,16 @@
       if (checked) {
         $.get('https://api.github.com/repos/github/gitignore/contents/' + type + '.gitignore', function(d) {
           var content = atob(d.content);
-          selectedTypes.push({name: type, content: d.content});
+          selectedTypes.push({type: type, content: content});
           updateTextArea();
         })
         .fail(function() {
-          selectedTypes.push({name: type, content: 'example code\nyeah'});
+          selectedTypes.push({type: type, content: '# Unable to retrieve data, please visit\n# https://raw.githubusercontent.com/github/gitignore/master/' + type + '.gitignore'});
           updateTextArea();
         });
       } else {
         for(var i = 0; i < selectedTypes.length; i += 1) {
-          if (type.toLowerCase() === selectedTypes[i].name.toLowerCase()) {
+          if (type.toLowerCase() === selectedTypes[i].type.toLowerCase()) {
             selectedTypes.splice(i, 1);
             updateTextArea();
             break;
@@ -90,7 +90,7 @@
         if (i > 0) {
           totalContent += '\n\n';
         }
-        totalContent += '# ' + selectedTypes[i].name + '\n';
+        totalContent += '# ' + selectedTypes[i].type + '\n';
         totalContent += selectedTypes[i].content;
       }
 
