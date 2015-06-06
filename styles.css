@@ -23,3 +23,13 @@ h1 {
   margin-bottom: 40px;
   color: #333;
 }
+
+.hint {
+  color: #888;
+  font-size: 0.7em;
+}
+
+#searchResults {
+  list-style-type: none;
+  padding-left: 0;
+}

@@ -48,7 +48,7 @@ function showResults(type) {
     checked = 'checked';
   }
   var $input = $('<input type="checkbox" data-type="' + type + '" ' + checked + ' />');
-  var $html = $('<li>' + type + '</li>');
+  var $html = $('<li> ' + type + '</li>');
   $html.prepend($input);
   $input.on('click', addContentToTextArea);
   $('#searchResults').html($html);
