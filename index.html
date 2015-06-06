@@ -8,11 +8,11 @@
     <ul id="searchResults"></ul>
     <textarea id="results" cols="100" rows="20"></textarea>
     <script>
-    var gitignoreTypes = [];
+    var types = [];
     var selectedTypes = [];
 
     $(document).ready(function() {
-      getGitignoreFile();
+      getTypes();
 
       $('#projectTypeInput').keyup(function() {
         var value = $(this).val();
@@ -20,21 +20,21 @@
       });
     });
 
-    function getGitignoreFile() {
+    function getTypes() {
       $.get('https://api.github.com/repos/github/gitignore/contents/', function(d) {
-        gitignoreTypes = convertToArrayOfGitignoreFiles(d);
+        types = convertToArrayOfGitignoreFiles(d);
       })
       .fail(function() {
-        gitignoreTypes = ['Meteor', 'Ada'];
+        types = ['Meteor', 'Ada'];
       });
     }
 
     function convertToArrayOfGitignoreFiles(d) {
-      var gitignoreTypes = [];
+      var types = [];
       for(var i = 0; i < d.length; i += 1) {
-        gitignoreTypes.push(d[i].name.split('.')[0]);
+        types.push(d[i].name.split('.')[0]);
       }
-      return gitignoreTypes;
+      return types;
     }
 
     function makeGitignoreSearch(searchTerm) {
@@ -44,9 +44,9 @@
     }
 
     function isValidType(type) {
-      for(var i = 0; i < gitignoreTypes.length; i += 1) {
-        if (gitignoreTypes[i].toLowerCase() === type.toLowerCase()) {
-          return gitignoreTypes[i];
+      for(var i = 0; i < types.length; i += 1) {
+        if (types[i].toLowerCase() === type.toLowerCase()) {
+          return types[i];
         }
       }
       return false;
