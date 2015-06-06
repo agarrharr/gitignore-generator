@@ -5,6 +5,8 @@
   <body>
     <label>What type of stuff do you want to ignore?</label>
     <input type="text" id="projectTypeInput"></input>
+    <ul id="results"></ul>
+    <textarea cols="100" rows="20"></textarea>
     <script>
     var gitignoreFiles;
 
@@ -32,7 +34,9 @@
     }
 
     function makeGitignoreSearch(searchTerm) {
-      console.log(isValidType(searchTerm));
+      if (isValidType(searchTerm)) {
+        showResults(searchTerm);
+      }
     }
 
     function isValidType(type) {
@@ -42,6 +46,16 @@
         }
       }
       return false;
+    }
+
+    function showResults(type) {
+      var $html = $('<li data-type=' + type + '><input type="checkbox"/>' + type + '</li>');
+      $html.on('click', addContentToTextArea);
+      $('#results').append($html);
+    }
+
+    function addContentToTextArea() {
+      console.log($(this).data('type'));
     }
     </script>
   </body>
