@@ -4,9 +4,16 @@ body {
   color: #FFF;
 }
 
+.cl {
+  clear: both;
+}
+
 .container {
-	width: 600px;
+  width: 90%;
+  max-width: 600px;
 	margin: 0 auto;
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
 
 body {
@@ -34,3 +41,12 @@ h1 {
   list-style-type: none;
   padding-left: 0;
 }
+
+.footer {
+  background-color: #EEE;
+  color: #333;
+}
+.footer a {
+  color: #333;
+}
+
