@@ -5,8 +5,8 @@
   <body>
     <label>What type of stuff do you want to ignore?</label>
     <input type="text" id="projectTypeInput"></input>
-    <ul id="results"></ul>
-    <textarea cols="100" rows="20"></textarea>
+    <ul id="searchResults"></ul>
+    <textarea id="results" cols="100" rows="20"></textarea>
     <script>
     var gitignoreFiles;
 
@@ -51,12 +51,22 @@
     function showResults(type) {
       var $html = $('<li data-type=' + type + '><input type="checkbox"/>' + type + '</li>');
       $html.on('click', addContentToTextArea);
-      $('#results').html($html);
+      $('#searchResults').html($html);
     }
 
     function addContentToTextArea(type) {
       var type = $(this).data('type');
-      console.log(type);
+      $.get('https://api.github.com/repos/github/gitignore/contents/' + type + '.gitignore', function(d) {
+        var content = atob(d.content);
+        appendToTextArea(content);
+      });
+    }
+
+    function appendToTextArea(content) {
+      console.log(content);
+      $('#results').val(function(i, val) {
+        return (val ? val + '\n\n': '') + content;
+      });
     }
     </script>
   </body>
