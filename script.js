@@ -56,10 +56,10 @@ function convertToArrayOfGitignoreFiles(d) {
 
 function makeGitignoreSearch(searchTerm) {
   var result = isValidType(searchTerm);
-  if (result.length > 0) {
-    showResults(result);
-  } else {
+  if (searchTerm.length === 0) {
     showResults(types);
+  } else {
+    showResults(result);
   }
 }
 
@@ -77,7 +77,11 @@ function isValidType(type) {
 
 function showResults(typesToShow) {
   var checked;
-  $('#searchResults').html('');
+  if (typesToShow.length === 0) {
+    $('#searchResults').html('<p>No results found.</p>');
+  } else {
+    $('#searchResults').html('');
+  }
   for(var i = 0; i < typesToShow.length; i += 1) {
     checked = '';
     if (indexOfSelected(typesToShow[i]) !== -1) {
