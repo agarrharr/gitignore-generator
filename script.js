@@ -43,26 +43,31 @@ function convertToArrayOfGitignoreFiles(d) {
 }
 
 function makeGitignoreSearch(searchTerm) {
-  if (result = isValidType(searchTerm)) {
-    showResults([result]);
+  var result = isValidType(searchTerm);
+  if (result.length > 0) {
+    showResults(result);
   } else {
     showResults(types);
   }
 }
 
 function isValidType(type) {
-  for(var i = 0; i < types.length; i += 1) {
-    if (types[i].toLowerCase() === type.toLowerCase()) {
-      return types[i];
+  var results = [];
+  if (type.length > 0) {
+    for(var i = 0; i < types.length; i += 1) {
+      if (types[i].toLowerCase().slice(0, type.length) === type.toLowerCase()) {
+        results.push(types[i]);
+      }
     }
   }
-  return false;
+  return results;
 }
 
 function showResults(typesToShow) {
-  var checked = '';
+  var checked;
   $('#searchResults').html('');
   for(var i = 0; i < typesToShow.length; i += 1) {
+    checked = '';
     if (indexOfSelected(typesToShow[i]) !== -1) {
       checked = 'checked';
     }
