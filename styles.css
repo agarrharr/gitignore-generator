@@ -32,11 +32,6 @@ h1 {
   color: #333;
 }
 
-.hint {
-  color: #888;
-  font-size: 0.7em;
-}
-
 #searchResults {
   height: 200px;
   overflow: scroll;
