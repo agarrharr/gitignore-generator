@@ -25,6 +25,7 @@ function getTypes(callback) {
       types = convertToArrayOfGitignoreFiles(d);
       $.get('https://api.github.com/repos/github/gitignore/contents/Global/', function(d) {
         types = types.concat(convertToArrayOfGitignoreFiles(d));
+        types.sort();
         localStorage.setItem('gitignore-types', types);
         callback();
       })
