@@ -36,8 +36,12 @@ function getTypes(callback) {
 
 function convertToArrayOfGitignoreFiles(d) {
   var types = [];
+  var currentFile;
   for(var i = 0; i < d.length; i += 1) {
-    types.push(d[i].name.split('.')[0]);
+    currentFile = d[i].name.split('.');
+    if (currentFile[1] === 'gitignore') {
+      types.push(currentFile[0]);
+    }
   }
   return types;
 }
