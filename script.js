@@ -23,8 +23,15 @@ function getTypes(callback) {
   } else {
     $.get('https://api.github.com/repos/github/gitignore/contents/', function(d) {
       types = convertToArrayOfGitignoreFiles(d);
-      localStorage.setItem('gitignore-types', types);
-      callback();
+      $.get('https://api.github.com/repos/github/gitignore/contents/Global/', function(d) {
+        types = types.concat(convertToArrayOfGitignoreFiles(d));
+        localStorage.setItem('gitignore-types', types);
+        callback();
+      })
+      .fail(function() {
+        localStorage.setItem('gitignore-types', types);
+        callback();
+      });
     })
     .fail(function() {
       types = ['Meteor', 'Ada'];
