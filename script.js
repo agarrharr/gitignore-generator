@@ -6,7 +6,7 @@ $(document).ready(function() {
 
   $('#projectTypeInput').keyup(function() {
     var value = $(this).val();
-    // makeGitignoreSearch(value);
+    makeGitignoreSearch(value);
   });
 });
 
@@ -42,11 +42,13 @@ function convertToArrayOfGitignoreFiles(d) {
   return types;
 }
 
-// function makeGitignoreSearch(searchTerm) {
-//   if (result = isValidType(searchTerm)) {
-//     showResults(result);
-//   }
-// }
+function makeGitignoreSearch(searchTerm) {
+  if (result = isValidType(searchTerm)) {
+    showResults([result]);
+  } else {
+    showResults(types);
+  }
+}
 
 function isValidType(type) {
   for(var i = 0; i < types.length; i += 1) {
@@ -59,6 +61,7 @@ function isValidType(type) {
 
 function showResults(typesToShow) {
   var checked = '';
+  $('#searchResults').html('');
   for(var i = 0; i < typesToShow.length; i += 1) {
     if (indexOfSelected(typesToShow[i]) !== -1) {
       checked = 'checked';
