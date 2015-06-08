@@ -38,6 +38,8 @@ h1 {
 }
 
 #searchResults {
+  height: 200px;
+  overflow: scroll;
   list-style-type: none;
   padding-left: 0;
 }

@@ -2,25 +2,34 @@ var types = [];
 var selectedTypes = [];
 
 $(document).ready(function() {
-  getTypes();
+  showOptions();
 
   $('#projectTypeInput').keyup(function() {
     var value = $(this).val();
-    makeGitignoreSearch(value);
+    // makeGitignoreSearch(value);
   });
 });
 
-function getTypes() {
+function showOptions() {
+  getTypes(function() {
+    showResults(types);
+  });
+}
+
+function getTypes(callback) {
   if (localStorage.getItem('gitignore-types')) {
     types = localStorage.getItem('types').split(',');
+    callback();
   } else {
     $.get('https://api.github.com/repos/github/gitignore/contents/', function(d) {
       types = convertToArrayOfGitignoreFiles(d);
       localStorage.setItem('gitignore-types', types);
+      callback();
     })
     .fail(function() {
       types = ['Meteor', 'Ada'];
       localStorage.setItem('gitignore-types', types);
+      callback();
     });
   }
 }
@@ -33,11 +42,11 @@ function convertToArrayOfGitignoreFiles(d) {
   return types;
 }
 
-function makeGitignoreSearch(searchTerm) {
-  if (result = isValidType(searchTerm)) {
-    showResults(result);
-  }
-}
+// function makeGitignoreSearch(searchTerm) {
+//   if (result = isValidType(searchTerm)) {
+//     showResults(result);
+//   }
+// }
 
 function isValidType(type) {
   for(var i = 0; i < types.length; i += 1) {
@@ -48,16 +57,18 @@ function isValidType(type) {
   return false;
 }
 
-function showResults(type) {
+function showResults(typesToShow) {
   var checked = '';
-  if (indexOfSelected(type) !== -1) {
-    checked = 'checked';
+  for(var i = 0; i < typesToShow.length; i += 1) {
+    if (indexOfSelected(typesToShow[i]) !== -1) {
+      checked = 'checked';
+    }
+    var $input = $('<input type="checkbox" data-type="' + typesToShow[i] + '" ' + checked + ' />');
+    var $html = $('<li> ' + typesToShow[i] + '</li>');
+    $html.prepend($input);
+    $input.on('click', addContentToTextArea);
+    $('#searchResults').append($html);
   }
-  var $input = $('<input type="checkbox" data-type="' + type + '" ' + checked + ' />');
-  var $html = $('<li> ' + type + '</li>');
-  $html.prepend($input);
-  $input.on('click', addContentToTextArea);
-  $('#searchResults').html($html);
 }
 
 function addContentToTextArea(type) {
