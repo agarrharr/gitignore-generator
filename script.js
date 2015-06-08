@@ -18,7 +18,7 @@ function showOptions() {
 
 function getTypes(callback) {
   if (localStorage.getItem('gitignore-types')) {
-    types = localStorage.getItem('types').split(',');
+    types = localStorage.getItem('gitignore-types').split(',');
     callback();
   } else {
     $.get('https://api.github.com/repos/github/gitignore/contents/', function(d) {
